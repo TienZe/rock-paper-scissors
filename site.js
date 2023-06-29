@@ -1,7 +1,45 @@
-console.log("Hello World!");
-
 const ROCK = 1, PAPER = 2, SCISSORS = 3;
 
+const btns = document.querySelectorAll("button[data-select]");
+const resultDiv = document.getElementById("result");
+
+const playerScoreEle = document.getElementById("player-score");
+const computerScoreEle = document.getElementById("computer-score");
+
+let playerScore = 0;
+let computerScore = 0;
+
+btns.forEach((element) => {
+    element.addEventListener("click", (e) => {
+       if (playerScore == 5 || computerScore == 5) {
+        resetGame();
+       }
+       
+       const playerSelection = +e.target.getAttribute("data-select");
+       const computerSelection = getComputerChoice();
+       const resString = playRound(computerSelection, playerSelection);
+
+       if (resString == "Win") ++playerScore;
+       if (resString == "Lose") ++computerScore;
+
+       playerScoreEle.textContent = playerScore;
+       computerScoreEle.textContent = computerScore;
+
+       if (playerScore == 5 || computerScore == 5) {
+            if (playerScore == 5) {
+                resultDiv.textContent = "You win this game";
+            } else {
+                resultDiv.textContent = "Computer win this game";
+            }   
+       }
+    });
+})
+
+function resetGame() {
+    playerScore = 0;
+    computerScore = 0;
+    resultDiv.textContent = "";
+}
 function getComputerChoice()
 {
     return Math.floor(Math.random()*3) + 1;
@@ -18,30 +56,3 @@ function playRound(computerSelection, playerSelection) {
     }
     return "Lose";
 }
-
-function game() {
-    let playerPoint = 0, computerPoint = 0;
-
-    while(playerPoint < 5 && computerPoint < 5) {
-        let playerSelection = +prompt("Choose selection 1-3", 1);
-        let computerSelection = getComputerChoice();
-
-        let res = playRound(computerSelection, playerSelection);
-        if (res == "Win") {
-            ++playerPoint;
-        } else if (res == "Lose") {
-            ++ computerPoint;
-        }
-
-        console.log(res);
-        console.log(`Tỉ số : ${playerPoint} : ${computerPoint}`);
-    }
-
-    if (playerPoint === 5) {
-        console.log("You win this game");
-    } else {
-        console.log("Computer win this game");
-    }
-}
-
-game();
